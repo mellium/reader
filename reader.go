@@ -30,7 +30,7 @@ func (er *errReader) Read(p []byte) (int, error) {
 // Read to be called, it will deadlock.
 // If f panics, Read considers it to have returned; future calls of Read return
 // without calling f.
-// For more information see the documentation for sync.Do.
+// For more information see the documentation for sync.Once.
 func Before(r io.Reader, f func() error) io.Reader {
 	return &beforeReader{
 		r: r,
