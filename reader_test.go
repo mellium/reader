@@ -29,7 +29,7 @@ func TestNumRead(t *testing.T) {
 		n, err := nrr.Read(p)
 		switch {
 		case err != nil:
-			t.Fatalf("Unexpected error while reading:", err)
+			t.Fatalf("Unexpected error while reading: '%v'", err)
 		case n != 7:
 			t.Fatalf("Read an unexpected ammount, want=7, got=%d", n)
 		case p[0] != '1' || p[6] != '7':
@@ -50,7 +50,7 @@ func TestNumReadByte(t *testing.T) {
 		bb, err := nrr.ReadByte()
 		switch {
 		case err != nil:
-			t.Fatalf("Unexpected error while reading:", err)
+			t.Fatalf("Unexpected error while reading: '%v'", err)
 		case bb != v:
 			t.Fatalf("Unexpected byte read; want=%d, got=%d", v, bb)
 		case nrr.TotalRead != i+1:
