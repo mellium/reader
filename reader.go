@@ -88,6 +88,8 @@ func (ar *afterReader) Read(p []byte) (n int, err error) {
 	return n, err
 }
 
+// TODO: I wrote this, then ended up not using it. Expose it anyways, or remove?
+
 // numReadReader keeps track of the number of bytes that have been read during
 // the lifetime of the reader.
 type numReadReader struct {
