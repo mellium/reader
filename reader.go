@@ -33,15 +33,16 @@ func (er *errReader) Read(p []byte) (int, error) {
 // For more information see the documentation for sync.Once.
 func Before(r io.Reader, f func() error) io.Reader {
 	return &beforeReader{
-		r: r,
-		f: f,
+		r:    r,
+		f:    f,
+		once: &sync.Once{},
 	}
 }
 
 type beforeReader struct {
 	r    io.Reader
 	f    func() error
-	once sync.Once
+	once *sync.Once
 }
 
 func (br *beforeReader) Read(p []byte) (n int, err error) {
@@ -56,7 +57,7 @@ func (br *beforeReader) Read(p []byte) (n int, err error) {
 
 func (br *beforeReader) Reset(r io.Reader) {
 	br.r = r
-	br.once = sync.Once{}
+	br.once = &sync.Once{}
 }
 
 // After returns an io.Reader that proxies to another Reader and calls f after
@@ -80,8 +81,8 @@ type afterReader struct {
 func (ar *afterReader) Read(p []byte) (n int, err error) {
 	n, err = ar.r.Read(p)
 	if err == io.EOF {
-		if err := ar.f(); err != nil {
-			return n, err
+		if e := ar.f(); e != nil {
+			return n, e
 		}
 	}
 	return n, err
