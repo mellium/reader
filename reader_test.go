@@ -6,8 +6,10 @@ import (
 	"errors"
 	"io"
 	"io/ioutil"
+	"net"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestNumRead(t *testing.T) {
@@ -124,5 +126,52 @@ func TestAfter(t *testing.T) {
 	ar.Read(nil)
 	if n > 3 {
 		t.Fatalf("Called function even though io.EOF was not returned")
+	}
+}
+
+type panicConn struct{}
+
+func (panicConn) Read(b []byte) (n int, err error) {
+	panic("reader: not implemented")
+}
+
+func (panicConn) Write(b []byte) (n int, err error) {
+	panic("reader: not implemented")
+}
+
+func (panicConn) Close() error {
+	panic("reader: not implemented")
+}
+
+func (panicConn) LocalAddr() net.Addr {
+	panic("reader: not implemented")
+}
+
+func (panicConn) RemoteAddr() net.Addr {
+	panic("reader: not implemented")
+}
+
+func (panicConn) SetDeadline(t time.Time) error {
+	panic("reader: not implemented")
+}
+
+func (panicConn) SetReadDeadline(t time.Time) error {
+	panic("reader: not implemented")
+}
+
+func (panicConn) SetWriteDeadline(t time.Time) error {
+	panic("reader: not implemented")
+}
+
+func TestConn(t *testing.T) {
+	c := Conn(panicConn{}, ReaderFunc(func(_ []byte) (int, error) {
+		return 10, nil
+	}))
+	n, err := c.Read(nil)
+	switch {
+	case n != 10:
+		t.Errorf("Got wrong number from conn read, got=%d, want=10", n)
+	case err != nil:
+		t.Errorf("Did not expect error from Conn's new read method, got: %v", err)
 	}
 }

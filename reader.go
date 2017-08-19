@@ -2,6 +2,7 @@ package reader
 
 import (
 	"io"
+	"net"
 	"sync"
 )
 
@@ -110,4 +111,32 @@ func (nrr *numReadReader) ReadByte() (byte, error) {
 	b, err := nrr.R.ReadByte()
 	nrr.TotalRead++
 	return b, err
+}
+
+// Conn replaces the Read method of c with r.Read.
+// Generally, r wraps the Read method of c.
+func Conn(c net.Conn, r io.Reader) net.Conn {
+	return &conn{
+		Conn: c,
+		r:    r,
+	}
+}
+
+type conn struct {
+	net.Conn
+	r io.Reader
+}
+
+func (c *conn) Read(p []byte) (n int, err error) {
+	return c.r.Read(p)
+}
+
+// ReaderFunc is an adapter to allow the use of ordinary functions as
+// io.Readers.  If f is a function with the appropriate signature, ReaderFunc(f)
+// is an io.Reader that calls f.
+type ReaderFunc func(p []byte) (n int, err error)
+
+// Read calls f.
+func (f ReaderFunc) Read(p []byte) (n int, err error) {
+	return f(p)
 }
