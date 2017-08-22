@@ -1,3 +1,5 @@
+// Package reader contains small, reusable APIs that build on the io.Reader
+// interface.
 package reader // import "mellium.im/reader"
 
 import (
