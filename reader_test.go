@@ -1,4 +1,4 @@
-package reader
+package reader_test
 
 import (
 	"errors"
@@ -8,11 +8,13 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"mellium.im/reader"
 )
 
 func TestError(t *testing.T) {
 	err := errors.New("Oops")
-	er := Error(err)
+	er := reader.Error(err)
 	if _, e := er.Read(nil); e != err {
 		t.Fatalf("Expected original error but got %v", e)
 	}
@@ -20,7 +22,7 @@ func TestError(t *testing.T) {
 
 func TestBefore(t *testing.T) {
 	n := 0
-	r := Before(strings.NewReader("Send these, the homeless, tempest-tost to me"), func() error {
+	r := reader.Before(strings.NewReader("Send these, the homeless, tempest-tost to me"), func() error {
 		n++
 		return nil
 	})
@@ -40,7 +42,7 @@ func TestBeforeError(t *testing.T) {
 	in := "I had a lover's quarrel with the world."
 	r := strings.NewReader(in)
 	oops := errors.New("Oops")
-	before := Before(r, func() error {
+	before := reader.Before(r, func() error {
 		return oops
 	})
 	if _, err := ioutil.ReadAll(before); err != oops {
@@ -58,7 +60,7 @@ func TestBeforeError(t *testing.T) {
 func TestAfter(t *testing.T) {
 	oops := errors.New("oops")
 	n := 0
-	ar := After(Error(io.EOF), func() error {
+	ar := reader.After(reader.Error(io.EOF), func() error {
 		n++
 		return oops
 	})
@@ -71,11 +73,12 @@ func TestAfter(t *testing.T) {
 			t.Fatalf("Failed to call function after EOF read")
 		}
 	}
-	ar.(*afterReader).r = Error(errors.New("Fail"))
+
+	ar = reader.After(reader.Error(errors.New("Fail")), func() error {
+		t.Errorf("Called function even though io.EOF was not returned")
+		return nil
+	})
 	ar.Read(nil)
-	if n > 3 {
-		t.Fatalf("Called function even though io.EOF was not returned")
-	}
 }
 
 type panicConn struct{}
@@ -113,7 +116,7 @@ func (panicConn) SetWriteDeadline(t time.Time) error {
 }
 
 func TestConn(t *testing.T) {
-	c := Conn(panicConn{}, ReaderFunc(func(_ []byte) (int, error) {
+	c := reader.Conn(panicConn{}, reader.ReaderFunc(func(_ []byte) (int, error) {
 		return 10, nil
 	}))
 	n, err := c.Read(nil)
