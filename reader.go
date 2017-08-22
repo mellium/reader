@@ -29,8 +29,7 @@ func (er *errReader) Read(p []byte) (int, error) {
 // proxied).
 // Because no call to Read returns until the one call to f returns, if f causes
 // Read to be called, it will deadlock.
-// If f panics, Read considers it to have returned; future calls of Read return
-// without calling f.
+// If f panics, future calls of Read return without calling f.
 // For more information see the documentation for sync.Once.
 func Before(r io.Reader, f func() error) io.Reader {
 	return &beforeReader{
@@ -65,8 +64,7 @@ func (br *beforeReader) Reset(r io.Reader) {
 // each Read that returns an io.EOF error.
 // If io.EOF is never returned, f is never called and if io.EOF is returned
 // multiple times, f will be called multiple times.
-// If f returns an error, it is returned from the call to Read instead of
-// io.EOF.
+// If f is called, its return value is returned from the call to r.Read.
 func After(r io.Reader, f func() error) io.Reader {
 	return &afterReader{
 		r: r,
