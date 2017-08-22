@@ -9,17 +9,9 @@ import (
 // Error returns a reader that always returns the given error for all calls to
 // Read.
 func Error(err error) io.Reader {
-	return &errReader{
-		err: err,
-	}
-}
-
-type errReader struct {
-	err error
-}
-
-func (er *errReader) Read(p []byte) (int, error) {
-	return 0, er.err
+	return Func(func(p []byte) (int, error) {
+		return 0, err
+	})
 }
 
 // Before returns an io.Reader that proxies calls to Read and executes the given
@@ -66,25 +58,15 @@ func (br *beforeReader) Reset(r io.Reader) {
 // multiple times, f will be called multiple times.
 // If f is called, its return value is returned from the call to r.Read.
 func After(r io.Reader, f func() error) io.Reader {
-	return &afterReader{
-		r: r,
-		f: f,
-	}
-}
-
-type afterReader struct {
-	r io.Reader
-	f func() error
-}
-
-func (ar *afterReader) Read(p []byte) (n int, err error) {
-	n, err = ar.r.Read(p)
-	if err == io.EOF {
-		if e := ar.f(); e != nil {
-			return n, e
+	return Func(func(p []byte) (n int, err error) {
+		n, err = r.Read(p)
+		if err == io.EOF {
+			if e := f(); e != nil {
+				return n, e
+			}
 		}
-	}
-	return n, err
+		return n, err
+	})
 }
 
 // Conn replaces the Read method of c with r.Read.
