@@ -87,30 +87,6 @@ func (ar *afterReader) Read(p []byte) (n int, err error) {
 	return n, err
 }
 
-// TODO: I wrote this, then ended up not using it. Expose it anyways, or remove?
-
-// numReadReader keeps track of the number of bytes that have been read during
-// the lifetime of the reader.
-type numReadReader struct {
-	R interface {
-		io.ByteReader
-		io.Reader
-	}
-	TotalRead int
-}
-
-func (nrr *numReadReader) Read(p []byte) (n int, err error) {
-	n, err = nrr.R.Read(p)
-	nrr.TotalRead += n
-	return
-}
-
-func (nrr *numReadReader) ReadByte() (byte, error) {
-	b, err := nrr.R.ReadByte()
-	nrr.TotalRead++
-	return b, err
-}
-
 // Conn replaces the Read method of c with r.Read.
 // Generally, r wraps the Read method of c.
 func Conn(c net.Conn, r io.Reader) net.Conn {
