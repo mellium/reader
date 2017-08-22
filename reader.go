@@ -105,12 +105,12 @@ func (c *conn) Read(p []byte) (n int, err error) {
 	return c.r.Read(p)
 }
 
-// ReaderFunc is an adapter to allow the use of ordinary functions as
-// io.Readers.  If f is a function with the appropriate signature, ReaderFunc(f)
-// is an io.Reader that calls f.
-type ReaderFunc func(p []byte) (n int, err error)
+// Func is an adapter to allow the use of ordinary functions as io.Readers.
+// If f is a function with the appropriate signature, Func(f) is an io.Reader
+// that calls f.
+type Func func(p []byte) (n int, err error)
 
 // Read calls f.
-func (f ReaderFunc) Read(p []byte) (n int, err error) {
+func (f Func) Read(p []byte) (n int, err error) {
 	return f(p)
 }

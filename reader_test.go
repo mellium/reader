@@ -116,7 +116,7 @@ func (panicConn) SetWriteDeadline(t time.Time) error {
 }
 
 func TestConn(t *testing.T) {
-	c := reader.Conn(panicConn{}, reader.ReaderFunc(func(_ []byte) (int, error) {
+	c := reader.Conn(panicConn{}, reader.Func(func(_ []byte) (int, error) {
 		return 10, nil
 	}))
 	n, err := c.Read(nil)
