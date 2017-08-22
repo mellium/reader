@@ -1,4 +1,4 @@
-package reader
+package reader // import "mellium.im/reader"
 
 import (
 	"io"
