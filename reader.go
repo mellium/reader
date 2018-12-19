@@ -59,19 +59,16 @@ func (br *beforeReader) Reset(r io.Reader) {
 }
 
 // After returns an io.Reader that proxies to another Reader and calls f after
-// each Read that returns an io.EOF error.
-// If io.EOF is never returned, f is never called and if io.EOF is returned
-// multiple times, f will be called multiple times.
-// If f is called, its return value is returned from the call to r.Read.
-func After(r io.Reader, f func() error) io.Reader {
+// each Read.
+// The return value of f is returned from the call to r.Read instead of the
+// original return value.
+func After(r io.Reader, f func(n int, err error) (int, error)) io.Reader {
 	return Func(func(p []byte) (n int, err error) {
 		n, err = r.Read(p)
-		if err == io.EOF {
-			if e := f(); e != nil {
-				return n, e
-			}
+		if f == nil {
+			return n, err
 		}
-		return n, err
+		return f(n, err)
 	})
 }
 
