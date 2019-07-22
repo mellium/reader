@@ -1,0 +1,19 @@
+image: freebsd/latest
+packages:
+  - go
+sources:
+  - https://github.com/mellium/reader.git
+tasks:
+  - info: |
+      go version
+      go env
+  - test: |
+      cd reader/
+      go test -v -cover ./...
+  - lint: |
+      cd reader/
+      go vet ./...
+      gofmt -s -l . && [ -z "$(gofmt -s -l .)" ]
+
+      # This will modify go.mod, so do it last.
+      go run golang.org/x/lint/golint ./...
