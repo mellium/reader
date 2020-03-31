@@ -1,5 +1,6 @@
 # mellium.im/reader
 
+[![Issue Tracker][badge]](https://github.com/mellium/xmpp/issues)
 [![GoDoc](https://godoc.org/mellium.im/reader?status.svg)](https://godoc.org/mellium.im/reader)
 [![License](https://img.shields.io/badge/license-FreeBSD-blue.svg)](https://opensource.org/licenses/BSD-2-Clause)
 
@@ -16,5 +17,6 @@ import "mellium.im/reader"
 The package may be used under the terms of the BSD 2-Clause License a copy of
 which may be found in the [LICENSE][LICENSE] file.
 
+[badge]: https://img.shields.io/badge/style-mellium%2fxmpp-green.svg?longCache=true&style=popout-square&label=issues
 [ioreader]: https://godoc.org/io#Reader
 [LICENSE]: ./LICENSE
