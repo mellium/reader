@@ -4,7 +4,7 @@
 [![GoDoc](https://godoc.org/mellium.im/reader?status.svg)](https://pkg.go.dev/mellium.im/reader)
 [![License](https://img.shields.io/badge/license-FreeBSD-blue.svg)](https://opensource.org/licenses/BSD-2-Clause)
 
-[![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png)](https://www.buymeacoffee.com/samwhited)
+<a href="https://opencollective.com/mellium" alt="Donate on Open Collective"><img src="https://opencollective.com/mellium/donate/button@2x.png?color=blue" width="200"/></a>
 
 A collection of [`io.Reader`][ioreader]'s that perform various useful functions.
 
