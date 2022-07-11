@@ -1,7 +1,7 @@
 # mellium.im/reader
 
-[![Issue Tracker][badge]](https://github.com/mellium/xmpp/issues)
-[![GoDoc](https://godoc.org/mellium.im/reader?status.svg)](https://pkg.go.dev/mellium.im/reader)
+[![Issue Tracker][badge]](https://mellium.im/issue)
+[![Docs](https://pkg.go.dev/badge/mellium.im/reader)](https://pkg.go.dev/mellium.im/reader)
 [![License](https://img.shields.io/badge/license-FreeBSD-blue.svg)](https://opensource.org/licenses/BSD-2-Clause)
 
 <a href="https://opencollective.com/mellium" alt="Donate on Open Collective"><img src="https://opencollective.com/mellium/donate/button@2x.png?color=blue" width="200"/></a>
@@ -25,4 +25,4 @@ conditions.
 
 [badge]: https://img.shields.io/badge/style-mellium%2fxmpp-green.svg?longCache=true&style=popout-square&label=issues
 [ioreader]: https://godoc.org/io#Reader
-[LICENSE]: ./LICENSE
+[LICENSE]: https://codeberg.org/mellium/xmpp/src/branch/main/LICENSE
