@@ -46,12 +46,12 @@ func TestBefore(t *testing.T) {
 func TestBeforeError(t *testing.T) {
 	in := "I had a lover's quarrel with the world."
 	r := strings.NewReader(in)
-	oops := errors.New("Oops")
+	errOops := errors.New("Oops")
 	before := reader.Before(r, func() error {
-		return oops
+		return errOops
 	})
-	if _, err := ioutil.ReadAll(before); err != oops {
-		t.Fatalf("Unexpected error returned, want=%v, got=%v", oops, err)
+	if _, err := ioutil.ReadAll(before); err != errOops {
+		t.Fatalf("Unexpected error returned, want=%v, got=%v", errOops, err)
 	}
 	b, err := ioutil.ReadAll(r)
 	switch {
@@ -62,7 +62,7 @@ func TestBeforeError(t *testing.T) {
 	}
 }
 
-var oops = errors.New("oops")
+var errOops = errors.New("oops")
 
 type afterTestData struct {
 	p   []byte
@@ -85,11 +85,11 @@ var afterTestCases = [...]struct {
 	1: {
 		r: reader.Error(io.EOF),
 		f: func(n int, err error) (int, error) {
-			return 2, oops
+			return 2, errOops
 		},
 		data: []afterTestData{
-			{p: nil, n: 2, err: oops},
-			{p: nil, n: 2, err: oops},
+			{p: nil, n: 2, err: errOops},
+			{p: nil, n: 2, err: errOops},
 		},
 	},
 	2: {
